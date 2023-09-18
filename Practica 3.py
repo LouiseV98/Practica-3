@@ -1,149 +1,107 @@
 import time
 
-def prioridades(procesos):
+def algoritmo_Prioridades(lista_Procesos):
     print("\nPrioridades\n")
-    tiempo_total = 0
-    tiempo_acumulado = 0
+    tiempo_Total = 0
 
-    while procesos:
-        # Ordenar los procesos por tiempo de CPU más corto
-        procesos.sort(key=lambda x: x[2])
+    while lista_Procesos:
 
-        proceso_actual = procesos.pop(0)
-        nombre, tiempo_llegada, tiempo_cpu = proceso_actual
-        tiempo_inicio = tiempo_acumulado
-        tiempo_ejecucion = tiempo_llegada
-        tiempo_acumulado = tiempo_inicio + tiempo_ejecucion
-        #print(f"Ejecutando {nombre} durante {tiempo_cpu} unidades de tiempo")
+        lista_Procesos.sort(key=lambda x: x[2]) #Ordena la lista de menor a mayor usando el atributo de prioridad como la posicion 2
 
-        tiempo_llegada -= tiempo_ejecucion
-        #tiempo_total += tiempo_cpu
+        proceso_Actual = lista_Procesos.pop(0)  #Extrae el primer item de la lista
+        nombre, tiempo_Ejecucion, prioridad = proceso_Actual    #Asigna los atributos de cada item en una variable
+        tiempo_Inicio = tiempo_Total    #Se asigna el tiempo del proceso a ejecturase y se va actualizando
+        tiempo_Ejecucion_Actual = tiempo_Ejecucion  #Se asigna el tiempo del proceso proveniente de la lista
+        tiempo_Total = tiempo_Inicio + tiempo_Ejecucion_Actual  #Se suma el tiempo actual y el total para ir actualizando
 
-        # Reducir el tiempo de CPU del proceso actual
-        #tiempo_cpu = 0
+        tiempo_Ejecucion -= tiempo_Ejecucion_Actual #Se resta el tiempo para actualizar el tiempo de ejecucion del proceso actual
 
-        # Verificar si hay otros procesos que llegaron durante la ejecución
-        procesos = [p for p in procesos if p[2] > tiempo_total]
+        #time.sleep(1)
 
-        if tiempo_llegada > 0:
-            procesos.append((nombre, tiempo_llegada, tiempo_cpu))
+        print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion_Actual}")
 
-        #time.sleep(2)
-
-        print(f"Proceso: {proceso_actual[0]}, Inicio: {tiempo_inicio}, Finalización: {tiempo_inicio + tiempo_ejecucion}")
-
-def fifo(procesos):
+def algoritmo_FIFO(lista_Procesos):
     print("\nFIFO\n")
-    tiempo_actual = 0
-    cola = list(procesos)
+    tiempo_Actual = 0
+    cola = list(lista_Procesos)
     resultado = []
     
     while cola:
-        proceso_actual = cola.pop(0)
-        tiempo_inicio = max(tiempo_actual, 0 if tiempo_actual == 0 else tiempo_actual)
-        tiempo_cpu = proceso_actual[1]
-        resultado.append((proceso_actual[0], tiempo_inicio, tiempo_inicio + tiempo_cpu))
+        proceso_Actual = cola.pop(0)    #Extrae el primer item de la cola
+        tiempo_Inicio = max(tiempo_Actual, 0 if tiempo_Actual == 0 else tiempo_Actual)  #Asigna el tiempo de inicio con la condicional de que si el numero sera 0 si es 0
+        tiempo_Ejecucion = proceso_Actual[1]    #Asigna el tiempo de ejecucion del proceso tomandolo como viene en el archivo
+        resultado.append((proceso_Actual[0], tiempo_Inicio, tiempo_Inicio + tiempo_Ejecucion))  #Guarda en una lista el proceso con su nombre, tiempo de inicio y su finalizacion
         
-        proceso_actual = (proceso_actual[0], proceso_actual[1], proceso_actual[2] - tiempo_cpu)
-        
-        tiempo_actual = tiempo_inicio + tiempo_cpu
+        tiempo_Actual = tiempo_Inicio + tiempo_Ejecucion    #Se calcula el tiempo con el cual el proximo proceso comenzara
 
-        #time.sleep(2)
+        #time.sleep(1)
         
-        print(f"Proceso: {proceso_actual[0]}, Inicio: {tiempo_inicio}, Finalización: {tiempo_inicio + tiempo_cpu}")
+        print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion}")
 
     return resultado
 
 
-def sjf(procesos):
+def algoritmo_SJF(lista_Procesos):
     print("\nSJF\n")
-    tiempo_total = 0
-    tiempo_acumulado = 0
+    tiempo_Total = 0
 
-    while procesos:
-        # Ordenar los procesos por tiempo de CPU más corto
-        procesos.sort(key=lambda x: x[1])
+    while lista_Procesos:
+        lista_Procesos.sort(key=lambda x: x[1])
+        proceso_Actual = lista_Procesos.pop(0)  #Extrae el primer item de la lista
+        nombre, tiempo_Ejecucion, prioridad = proceso_Actual    #Asigna los atributos de cada item en una variable
+        tiempo_Inicio = tiempo_Total    #Se asigna el tiempo del proceso a ejecturase y se va actualizando
+        tiempo_Ejecucion_Actual = tiempo_Ejecucion  #Se asigna el tiempo del proceso proveniente de la lista
+        tiempo_Total = tiempo_Inicio + tiempo_Ejecucion_Actual  #Se suma el tiempo actual y el total para ir actualizando
 
-        proceso_actual = procesos.pop(0)
-        nombre, tiempo_llegada, tiempo_cpu = proceso_actual
-        tiempo_inicio = tiempo_acumulado
-        tiempo_ejecucion = tiempo_llegada
-        tiempo_acumulado = tiempo_inicio + tiempo_ejecucion
-        #print(f"Ejecutando {nombre} durante {tiempo_cpu} unidades de tiempo")
+        tiempo_Ejecucion -= tiempo_Ejecucion_Actual #Se resta el tiempo para actualizar el tiempo de ejecucion del proceso actual
 
-        tiempo_llegada -= tiempo_ejecucion
-        #tiempo_total += tiempo_cpu
+        #time.sleep(1)
 
-        # Reducir el tiempo de CPU del proceso actual
-        #tiempo_cpu = 0
+        print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion_Actual}")
 
-        # Verificar si hay otros procesos que llegaron durante la ejecución
-        procesos = [p for p in procesos if p[1] > tiempo_total]
-
-        if tiempo_llegada > 0:
-            procesos.append((nombre, tiempo_llegada, tiempo_cpu))
-
-        #time.sleep(2)
-
-        print(f"Proceso: {proceso_actual[0]}, Inicio: {tiempo_inicio}, Finalización: {tiempo_inicio + tiempo_ejecucion}")
-
-def round_robin(procesos, quantum):
+def round_robin(lista_Procesos, quantum):
     print("\nRound Robin\n")
-    tiempo_actual = 0
-    cola = list(procesos)
+    tiempo_Actual = 0
+    cola = list(lista_Procesos)
     resultado = []
     while cola:
-        proceso_actual = cola.pop(0)
-        tiempo_inicio = max(tiempo_actual, 0 if tiempo_actual == 0 else tiempo_actual)
-        tiempo_cpu = min(quantum, proceso_actual[1])
+        proceso_Actual = cola.pop(0)    #Extrae el primer item de la cola
+        tiempo_Inicio = max(tiempo_Actual, 0 if tiempo_Actual == 0 else tiempo_Actual)  #Asigna el tiempo de inicio con la condicional de que si el numero sera 0 si es 0
+        tiempo_Ejecucion = min(quantum, proceso_Actual[1])  #Asigna el tiempo de ejecucion, el cual dependiendo su tiempo actual sera menor o igual a 3 por el quantum
 
-        resultado.append((proceso_actual[0], tiempo_inicio, tiempo_inicio + tiempo_cpu))
-        proceso_actual = (proceso_actual[0], proceso_actual[1] - tiempo_cpu)
+        resultado.append((proceso_Actual[0], tiempo_Inicio, tiempo_Inicio + tiempo_Ejecucion)) #Guarda en una lista el proceso con su nombre, tiempo de inicio y su finalizacion
+        proceso_Actual = (proceso_Actual[0], proceso_Actual[1] - tiempo_Ejecucion)  #Guarda en una variable todo el proceso despues del resultado anterior para compararlo despues
 
-        tiempo_actual = tiempo_inicio + tiempo_cpu
+        tiempo_Actual = tiempo_Inicio + tiempo_Ejecucion    #Se calcula el tiempo con el cual el proximo proceso comenzara
 
-        #time.sleep(2)
+        #time.sleep(1)
 
-        print(f"Proceso: {proceso_actual[0]}, Inicio: {tiempo_inicio}, Finalización: {tiempo_inicio + tiempo_cpu}")
+        print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion}")
 
-        if proceso_actual[1] > 0:
-            cola.append(proceso_actual)
+        if proceso_Actual[1] > 0:   #Condicional en la que si el tiempo de ejecucion es mayor que 0, el proceso vuelve a la cola
+            cola.append(proceso_Actual)
 
     return resultado
 
-def cargar_procesos_desde_archivo(nombre_archivo):
-    procesos = []
-    with open(nombre_archivo, "r") as archivo:
+def cargar_Procesos_Desde_Archivo(nombre_archivo):
+    procesos = []   #En esta lista se guardan cada uno de los procesos provenientes del archivo
+    with open(nombre_archivo, "r") as archivo:  #Esta orden hace que el archivo se abra en modo de lectura
         for linea in archivo:
-            nombre, tiempo_ejecucion, prioridad = linea.strip().split(",")
-            procesos.append((nombre, int(tiempo_ejecucion), int(prioridad)))
-    # Ordenar procesos por tiempo de llegada de menor a mayor
-    procesos = sorted(procesos, key=lambda x: x[1])
+            nombre, tiempo_Ejecucion, prioridad = linea.strip().split(",")  #Esta instruccion hace que separe por cada "," que encuentre y elimine espacios si es que los tiene
+            procesos.append((nombre, int(tiempo_Ejecucion), int(prioridad)))    #Guarda en una variable el proceso listo
     return procesos
 
-def cargar_procesos_desde_archivo2(nombre_archivo):
-    procesos = []
-    with open(nombre_archivo, "r") as archivo:
-        for linea in archivo:
-            nombre, tiempo_ejecucion, prioridad = linea.strip().split(",")
-            procesos.append((nombre, int(tiempo_ejecucion), int(prioridad)))
-    # Ordenar procesos por tiempo de llegada de menor a mayor
-    #procesos = sorted(procesos, key=lambda x: x[1])
-    return procesos
+archivo_Procesos = "procesos.txt"  #Nombre del archivo de procesos
+quantum = 3 #Quantum para el algoritmo RR
+    
+#Variables para cargar los procesos 
+proceso_RR = cargar_Procesos_Desde_Archivo(archivo_Procesos)
+proceso_SJF = cargar_Procesos_Desde_Archivo(archivo_Procesos)
+proceso_FIFO = cargar_Procesos_Desde_Archivo(archivo_Procesos)
+proceso_Prioridades = cargar_Procesos_Desde_Archivo(archivo_Procesos)
 
-if __name__ == "__main__":
-    archivo_procesos = "procesos.txt"  # Nombre del archivo de procesos
-    quantum = 3
-    
-    procesos = cargar_procesos_desde_archivo2(archivo_procesos)
-    procesos2 = cargar_procesos_desde_archivo(archivo_procesos)
-    procesos3 = cargar_procesos_desde_archivo2(archivo_procesos)
-    resultado2 = sjf(procesos2)
-    
-    #print("Simulación de Round Robin:")
-    #print("Proceso\tInicio\tFinalización")
-    
-    resultado = round_robin(procesos, quantum)
-    resultado3 = fifo(procesos3)
-    procesos4 = cargar_procesos_desde_archivo2(archivo_procesos)
-    resultado4 = prioridades(procesos4)
+#Variables para mostrar los algoritmos
+algoritmo_rr = round_robin(proceso_RR, quantum)
+algoritmo_sfj = algoritmo_SJF(proceso_SJF)
+algoritmo_fifo = algoritmo_FIFO(proceso_FIFO)
+algoritmo_prioridades = algoritmo_Prioridades(proceso_Prioridades)
