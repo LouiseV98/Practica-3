@@ -16,7 +16,7 @@ def algoritmo_Prioridades(lista_Procesos):
 
         tiempo_Ejecucion -= tiempo_Ejecucion_Actual #Se resta el tiempo para actualizar el tiempo de ejecucion del proceso actual
 
-        #time.sleep(1)
+        time.sleep(1)
 
         print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion_Actual}")
 
@@ -34,7 +34,7 @@ def algoritmo_FIFO(lista_Procesos):
         
         tiempo_Actual = tiempo_Inicio + tiempo_Ejecucion    #Se calcula el tiempo con el cual el proximo proceso comenzara
 
-        #time.sleep(1)
+        time.sleep(1)
         
         print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion}")
 
@@ -55,7 +55,7 @@ def algoritmo_SJF(lista_Procesos):
 
         tiempo_Ejecucion -= tiempo_Ejecucion_Actual #Se resta el tiempo para actualizar el tiempo de ejecucion del proceso actual
 
-        #time.sleep(1)
+        time.sleep(1)
 
         print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion_Actual}")
 
@@ -74,7 +74,7 @@ def round_robin(lista_Procesos, quantum):
 
         tiempo_Actual = tiempo_Inicio + tiempo_Ejecucion    #Se calcula el tiempo con el cual el proximo proceso comenzara
 
-        #time.sleep(1)
+        time.sleep(1)
 
         print(f"Proceso: {proceso_Actual[0]}, Inicio: {tiempo_Inicio}, Finalización: {tiempo_Inicio + tiempo_Ejecucion}")
 
